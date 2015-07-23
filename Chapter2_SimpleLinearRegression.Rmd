@@ -83,11 +83,60 @@ Not true, if $\varepsilon$, does not have constant variance, regardless of x, (i
 
 These is also an Anderson-Darling test for normality. Small values of AD indciate normal distributions is a better fit. 
 
-**(k) The chi-square distribution is left-skewed.** <span style="color:green"> RED: </span>
+**(k) The chi-square distribution is left-skewed.** <span style="color:red"> FALSE: </span>
 
 No a chi-square distribution is right skewed - (long tail on the right) 
 
-**(l) Small p-values for the Anderson–Darling test statistic indicate that the data are right-skewed.**
+```{r, echo=FALSE}
+x <- rchisq(1000, 5)
+hist(x, prob=TRUE)
+curve( dchisq(x, df=5), col='green', add=TRUE)
+curve( dchisq(x, df=8), col='blue', add=TRUE)
+curve( dchisq(x, df=10), col='red', add=TRUE )
+
+
+```
+
+**(l) Small p-values for the Anderson–Darling test statistic indicate that the data are right-skewed.** <span style="color:red"> FALSE </span>
+
+The null hyppothesis is that the normal distribution fits, so that small p-values will indiate lack of fit. 
+
+```{r, echo=FALSE}
+#R has a quantile-quantil plot (QQ) . Plots data against a standard normal distibution  X = N(0,1) with mean 0 and sd 1. There is also a qqline which adds a line to the normal QQ plot. This line makes it easier to evaluate a clear deviationfrom normality. the licster all the points lie to the line the closer the distirbution of the samples comes from a noraml distirbution. 
+
+#Genearte chi-sqaure distribution
+x <- rchisq(1000, 5)
+qqnorm( x, main='X')   #Plots the data against a normal distribution
+qqline( x,col="red" )
+
+mean(x)
+length(x)
+std
+sd(x,na.rm=TRUE)
+
+
+y <- rt(200, df = 5)
+qqnorm(y)
+qqline(y, col = "red")
+qqplot(y, rt(300, df = 5))
+
+qqplot(qchisq(ppoints(500), df = 3), y,
+       main = expression("Q-Q plot for" ~~ {chi^2}[nu == 3]))
+qqline(y, distribution = function(p) qchisq(p, df = 3),
+       prob = c(0.1, 0.6), col = 2)
+mtext("qqline(*, dist = qchisq(., df=3), prob = c(0.1, 0.6))")
+
+
+
+
+hist(x, prob=TRUE)
+curve( dchisq(x, df=5), col='green', add=TRUE)
+curve( dchisq(x, df=8), col='blue', add=TRUE)
+curve( dchisq(x, df=10), col='red', add=TRUE )
+
+```
+
+
 
 **(m) A funnel pattern in the plot of residuals versus fits indicates a violation of the independence assumption.**
 
