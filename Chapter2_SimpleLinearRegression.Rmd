@@ -99,7 +99,7 @@ curve( dchisq(x, df=10), col='red', add=TRUE )
 
 **(l) Small p-values for the Anderson–Darling test statistic indicate that the data are right-skewed.** <span style="color:red"> FALSE </span>
 
-The null hyppothesis is that the normal distribution fits, so that small p-values will indiate lack of fit. 
+The null hyppothesis is that the normal distribution fits, so that small p-values will indiate lack of fit. There is also another test the Shapiro Wilks test. 
 
 ```{r, echo=FALSE}
 #R has a quantile-quantil plot (QQ) . Plots data against a standard normal distibution  X = N(0,1) with mean 0 and sd 1. There is also a qqline which adds a line to the normal QQ plot. This line makes it easier to evaluate a clear deviationfrom normality. the licster all the points lie to the line the closer the distirbution of the samples comes from a noraml distirbution. 
@@ -107,12 +107,42 @@ The null hyppothesis is that the normal distribution fits, so that small p-value
 #Genearte chi-sqaure distribution
 x <- rchisq(1000, 5)
 qqnorm( x, main='X')   #Plots the data against a normal distribution
-qqline( x,col="red" )
+qqline( x,col="red" )   #Line where the it should lie
 
-mean(x)
-length(x)
-std
-sd(x,na.rm=TRUE)
+#Normal test
+sw=shapiro.test(x)
+ad=nortest::ad.test(x)
+
+text(2,0, cex=.8, pos=4, paste(" mean =", round(mean(x), digits=2),
+															 "\n obs = ", length(x) ,
+															 "\n standard dev. =", round(sd(x,na.rm=TRUE),digits=2),
+															 "\n skewness =", round(e1071::skewness(x), digits=2),
+															 "\n AD =",round(ad$statistic,digits=2),
+															 "p =", round(ad$p.value,digits=2),
+															 "\n SW =",round(sw$statistic,digits=3),
+															 "p =", round(sw$p.value,digits=3)))
+	
+	 
+
+op <- par(fig=c(.02,.5,.4,.98), new=TRUE)
+#A numerical vector of the form c(x1, x2, y1, y2) which gives the (NDC) coordinates of the figure region in the display region of the device. If you set this, unlike S, you start a new plot, so to add to an existing plot use new = TRUE as well.		 
+		 
+		 		 
+		 "Orange line is\n sample average\n weight")
+#Create the chart and put it in the original figure inside the box
+hist(x, probability=T,col="light blue", xlab="", ylab="", main="", axes=F)
+lines(density(x), col="red", lwd=2)
+box()
+par(op)
+
+op <- par(fig=c(.5,.98,.02,.6), new=TRUE)
+text(1,9,"Hello World Default")
+box()
+par(op)
+
+
+
+
 
 
 y <- rt(200, df = 5)
