@@ -1,0 +1,307 @@
+---
+title: "Chapter 2 Regression Modelling Questions"
+author: "Brian Carter"
+date: "17 July 2015"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+---
+
+# holder for numbers
+# Clarifying the Concepts
+
+## True/False
+Determine whether the following statements are true or false. If a statement is false,explain why and suggest how one might alter the statement to make it true.
+
+**(a) The least-squares line is that line which minimizes the sum of the residuals.**
+
+<span style="color:green"> TRUE: </span> The least-squares line minimizes the population sum of squared errors. Errors can be called residuals. $SSE_p= \displaystyle\sum_{i=1}^{n} {\varepsilon}_{i}^{2} = \displaystyle\sum_{i=1}^{n}(y_i - {\beta}_0 - {\beta}_1x_i)^2$. All recall that $SST = SSR + SSE$, therefore the least-squares line should maxmimise the sum of the regression (SSR), i.e. mops up the error. 
+
+**(b) If all the residuals equal zero, SST = SSR.** <span style="color:green"> TRUE: </span>
+
+**(c) If the value of the correlation coefficient is negative, this indicates that the variables are negatively correlated.** <span style="color:green"> TRUE: </span>
+
+**(d) The value of the correlation coefficient can be calculated given the value of $r^2$ alone.**
+
+<span style="color:green"> TRUE: </span>  $r^2$ is the **cooefficent of determiniation** in simple linear regression. It can be calculated by $\frac{SSR}{SST}$. r is the **Peasron product moment correlation coefficient.** Recall 
+
+$$ \sigma^2 \backslash s^2 = Variance_(pop. \backslash samp.) = \frac{1}{N}\sum_{i=1}^{N} (x_i-\mu)^2 \backslash \frac{1}{N-1}\sum_{i=1}^{N} (x_i-\bar{x})^2$$
+
+$$\sigma \backslash s = Standard Deviation = \sqrt{\sigma^2} \backslash \sqrt{s^2} $$
+
+The standard deviation measures the variance at the same scale as the entries, rather than the square of the differences.The **Peasron product moment correlation coefficient.** is called rho \rho for a population or **r** for a sample. 
+
+$$r = r_{xy} = \frac{1}{N-1} \sum_{i=1}^{N} \left( \frac{x_i-\bar{x}}{s_x} \right) \left( \frac{y_i-\bar{y}}{s_y} \right)$$ 
+
+This is how many standard scores is the point away from the mean and do they follow a pattern, therefore no need to scale as each obeys its own scale. This Through a series of steps it is easy to show that 
+
+$$ r = \pm \sqrt{r^2}.$$
+
+It is + when $\beta_1$ (the estimate slope of the regression line) is + and - when $\beta_1$ is -.
+
+
+**(e) Outliers are influential observations.**
+
+That depends. Outliers have high residual value (error). However it may or may not be *influential*. Usually it would require that th point has *high leverage* score also. 
+
+**(f) If the residual for an outlier is positive, we may say that the observed y-value is higher than the regression estimated, given the x-value.**  <span style="color:green"> TRUE: </span>
+
+**(g) An observation may be influential even though it is neither an outlier nor a high leverage point.** <span style="color:red"> FALSE: </span> But it may be possible for a point not quite flagged as an outlier or higher leverage through a combination of the both become influential.
+
+**(h) The bestway of determining whether an observation is influential is to see whether its Cook’s distance exceeds 1.0.**
+
+Standardized residuals are residuals divided by the standard error, so that they are all on the same scale. 
+
+$$residual \backslash error = y_i-\hat{y_i}$$
+
+$$standardized \: reisdual = s_{i,resid} = s\sqrt{1-h_i} $$ 
+
+s here is the **standard error of the estimate** not the sample standard deviation, although it is the same calculation bar the degrees of freedom. The MSE is similar to the variance, therefore standard error similar to standard deviation. Std. resiudals that are greater than 2 might be considered outliers - 2 standard deviations etc. 
+
+$$s = \sqrt{MSE} = \sqrt{mean \; squared \; error} = \sqrt{\frac{SSE}{n-m-1}}$$
+
+$$SSE = \sum_{i=1}^{N}  (y_i-\hat{y_i})^2$$
+
+$h_i$ is the leverage. 
+
+$$h_i = \frac{1}{n} + \frac{(x_i-\bar{x})^2}{\sum (x_i-\bar{x})^2}$$
+
+Leverage focuses on the predictors. The further a point is away from the mean of a predictor the greater the leverage. A leverage value greater than $\frac{2(m+1)}{n}$ or $\frac{3(m+1)}{n}$ may be high leverage.
+
+Cook's distance measures the level of infludence of an observation by taking into account boch the size of the residual an the amount of leverage for that observation. 
+
+$$Cook's = D_i = \frac{(y_i-\hat{y})^2}{(m+1)s^2}\frac{h_i}{(1-h_i)^2}$$
+
+Where s the standard errro of the estimate. Rule of thumb is Cook's greater than 1 many be influential, but also can use the F-distribution with $F_{(m,n-m)}$ degrees of freedom. If the value is in 25th percentile not influential, over the median it is. 
+
+**(i) If one is interested in using regression analysis in a strictly descriptive manner, with no inference and no model building,one need not worry quite so much about assumption validation.**
+
+Not true, if $\varepsilon$, does not have constant variance, regardless of x, (i.e. jumps in values, breaks) might not work. And other assumptions.  
+
+**(j) In a normality plot, if the distribution is normal, the bulk of the points should fall on a straight line.**  <span style="color:green"> TRUE: </span>
+
+These is also an Anderson-Darling test for normality. Small values of AD indciate normal distributions is a better fit. 
+
+**(k) The chi-square distribution is left-skewed.** <span style="color:green"> RED: </span>
+
+No a chi-square distribution is right skewed - (long tail on the right) 
+
+**(l) Small p-values for the Anderson–Darling test statistic indicate that the data are right-skewed.**
+
+**(m) A funnel pattern in the plot of residuals versus fits indicates a violation of the independence assumption.**
+
+##
+2.2. Describe the difference between the estimated regression line and the true regression
+line.
+
+##
+2.3.Calculate the estimated regression equation for the orienteering example using the
+data in Table 2.3. Use either the formulas or software of your choice.
+
+##
+2.4. 
+Where would a data point be situated which has the smallest possible leverage?
+
+##
+2.5. Calculate the values for leverage, standardized residual, and Cook’s distance for the
+hard-core hiker example in the text.
+
+##
+2.6. Calculate the values for leverage, standardized residual, and Cook’s distance for the
+eleventh hiker who had hiked for 10 hours and traveled 23 kilometers. Show that
+although it is neither an outlier nor of high leverage, it is nevertheless
+
+##
+2.7. Match each of the following regression terms with its definition.
+
+TABLE HERE
+
+##
+2.8. Explain in your own words the implications of the regression assumptions for the
+behavior of the response variable y.
+
+##
+2.9. Explain what statistics from Table 2.11 indicate to us that there may indeed be a linear
+relationship between x and y in this example, even though the value for r 2 is less than
+1%.
+
+##
+2.10. Which values of the slope parameter indicate that no linear relationship exists between
+the predictor and response variables? Explain how this works.
+
+##
+2.11. Explain what information is conveyed by the value of the standard error of the slope
+estimate.
+
+##
+2.12. Describe the criterion for rejecting the null hypothesis when using the p-value method
+for hypothesis testing. Who chooses the value of the level of significance, α? Make
+up a situation (one p-value and two different values of α) where the very same data
+could lead to two different conclusions of the hypothesis test. Comment.
+
+##
+2.13. 
+(a) Explain why an analyst may prefer a confidence interval to a hypothesis test.
+(b) Describe how a confidence interval may be used to assess significance.
+
+##
+2.14. Explain the difference between a confidence interval and a prediction interval. Which
+interval is always wider? Why? Which interval is probably, depending on the situation,
+more useful to a data miner? Why?
+
+##
+2.15. Clearly explain the correspondence between an original scatter plot of the data and a
+plot of the residuals versus fitted values.
+
+##
+2.16. What recourse do we have if the residual analysis indicates that the regression assumptions
+have been violated? Describe three different rules, heuristics, or family of
+functions that will help us.
+
+##
+2.17. A colleague would like to use linear regression to predict whether or not customers
+will make a purchase based on some predictor variable. What would you explain to
+your colleague?
+
+
+# WORKING WITH DATA
+
+##
+2.18. Based on the scatter plot of attendance at football games versus winning percentage
+of the home team shown in Figure E2.18, answer the following questions.
+
+(a) Describe any correlation between the variables, and estimate the value of the
+correlation coefficient r .
+
+(b) Estimate as best you can the values of the regression coefficients b0 and b1.
+
+(c) Will the p-value for the hypothesis test for the existence of a linear relationship
+between the variables be small or large? Explain.
+
+(d) Will the confidence interval for the slope parameter include zero? Explain.
+
+(e) Will the value of s be closer to 10, 100, 1000, or 10,000? Why?
+
+(f) Is there an observation that may look as though it is an outlier?
+
+##
+2.19. Use the regression output (shown in Table E2.19) to verify your responses from
+Exercise 2.18.
+
+##
+2.20. Based on the scatter plot shown in Figure E2.20, answer the following questions.
+
+(a) Is it appropriate to perform linear regression? Why or why not?
+
+(b) What type of transformation or transformations are called for? Use the bulging
+rule.
+
+##
+2.21. Based on the regression output shown in Table E2.21 (from the churn data set), answer
+the following questions.
+
+(a) Is there evidence of a linear relationship between z vmail messages (z-scores of
+the number of voice mail messages) and z day calls (z-scores of the number of
+day calls made)? Explain.
+
+(b) Since it has been standardized, the response z vmail messages has a standard
+deviation of 1.0. What would be the typical error in predicting z vmail messages
+if we simply used the sample mean response and no information about day calls?
+Now, from the printout, what is the typical error in predicting z vmail messages
+given z day calls? Comment.
+
+# Hand on Analysis
+
+##
+2.22. Open the baseball data set, which is available at the book series Web site. Subset the
+data so that we are working with batters who have at least 100 at bats.
+
+(a) We are interested in investigating whether there is a linear relationship between
+the number of times a player has been caught stealing and the number of stolen
+bases the player has. Construct a scatter plot with caught as the response. Is there
+evidence of a linear relationship?
+
+(b) Based on the scatter plot, is a transformation to linearity called for? Why or why
+not?
+
+(c) Perform the regression of the number of times a player has been caught stealing
+versus the number of stolen bases the player has.
+
+(d) Find and interpret the statistic which tells you how well the data fit the model.
+
+(e) What is the typical error in predicting the number of times a player is caught
+stealing given his number of stolen bases?
+
+(f) Interpret the y-intercept. Does this make sense? Why or why not?
+
+(g) Inferentially, is there a significant relationship between the two variables? What
+tells you this?
+
+(h) Calculate and interpret the correlation coefficient.
+
+(i) Clearly interpret the meaning of the slope coefficient.
+
+(j) Suppose someone said that knowing the number of stolen bases a player has
+explains most of the variability in the number of times the player gets caught
+stealing. What would you say?
+
+##
+2.23. Open the cereals data set, which is available at the book series Web site.
+
+(a) We are interested in predicting nutrition rating based on sodium content. Construct
+the appropriate scatter plot.
+
+(b) Based on the scatter plot, is there strong evidence of a linear relationship between
+the variables? Discuss. Characterize their relationship, if any.
+
+(c) Perform the appropriate regression.
+
+(d) Which cereal is an outlier? Explain why this cereal is an outlier.
+
+(e) What is the typical error in predicting rating based on sodium content?
+
+(f) Interpret the y-intercept. Does this make any sense? Why or why not?
+
+(g) Inferentially, is there a significant relationship between the two variables? What
+tells you this?
+
+(h) Calculate and interpret the correlation coefficient.
+
+(i) Clearly interpret the meaning of the slope coefficient.
+
+(j) Construct and interpret a 95% confidence interval for the true nutrition rating for
+all cereals with a sodium content of 100.
+
+(k) Construct and interpret a 95% confidence interval for the nutrition rating for a
+randomly chosen cereal with sodium content of 100.
+
+##
+2.24. Open the California data set, which is available at the book series Web site.
+
+(a) Recapitulate the analysis performed within the chapter.
+
+(b) Set aside the military outliers and proceed with the analysis with the remaining
+848 records. Apply whatever data transformations are necessary to construct your
+best regression model.
+
+
+
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
