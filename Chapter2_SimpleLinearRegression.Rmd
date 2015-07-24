@@ -85,9 +85,11 @@ These is also an Anderson-Darling test for normality. Small values of AD indciat
 
 **(k) The chi-square distribution is left-skewed.** <span style="color:red"> FALSE: </span>
 
-No a chi-square distribution is right skewed - (long tail on the right) 
+No a $\chi^2$ distribution is right skewed - (long tail on the right) 
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
+
+#Talk a little bit about where chi- comes frome
 x <- rchisq(1000, 5)
 hist(x, prob=TRUE)
 curve( dchisq(x, df=5), col='green', add=TRUE)
@@ -104,83 +106,104 @@ The null hyppothesis is that the normal distribution fits, so that small p-value
 ```{r, echo=FALSE}
 #R has a quantile-quantil plot (QQ) . Plots data against a standard normal distibution  X = N(0,1) with mean 0 and sd 1. There is also a qqline which adds a line to the normal QQ plot. This line makes it easier to evaluate a clear deviationfrom normality. the licster all the points lie to the line the closer the distirbution of the samples comes from a noraml distirbution. 
 
-#Genearte chi-sqaure distribution
-x <- rchisq(1000, 5)
-qqnorm( x, main='X')   #Plots the data against a normal distribution
-qqline( x,col="red" )   #Line where the it should lie
+
+x1 <- rchisq(1000, 5)   #Generate chi-sqaure distribution
+x2 <- rnorm(250,10,1)   #Generate normal distribution with 250 points, mean 10, sd 1
+
+qqnorm(x1, main='QQPlot Test for Normality',xlab="X")   #Plots the data against a normal distribution
+qqline(x1,col="red" )   #Line where the it should lie
 
 #Normal test
-sw=shapiro.test(x)
-ad=nortest::ad.test(x)
+sw=stats::shapiro.test(x1)      #Shapiro-Wilks test
+ks=stats::ks.test(x1,"pnorm",mean(x1),sqrt(var(x1))) # Kolmogorov-Smirnov test
+ad=nortest::ad.test(x1) # Anderson-Darling test
 
-text(2,0, cex=.8, pos=4, paste(" mean =", round(mean(x), digits=2),
-															 "\n obs = ", length(x) ,
-															 "\n standard dev. =", round(sd(x,na.rm=TRUE),digits=2),
-															 "\n skewness =", round(e1071::skewness(x), digits=2),
+
+# skewness and kurtosis, they should be around (0,3) for normal.
+
+
+text(1.5,7, cex=.8, pos=4, paste(" mean =", round(mean(x1), digits=2),
+															 "\n obs = ", length(x1) ,
+															 "\n standard dev. =", round(sd(x1,na.rm=TRUE),digits=2),
+															 "\n skewness =", round(e1071::skewness(x1), digits=2),
+															 "\n kortosis =",round(e1071::kurtosis(x1),digits=2),
 															 "\n AD =",round(ad$statistic,digits=2),
 															 "p =", round(ad$p.value,digits=2),
 															 "\n SW =",round(sw$statistic,digits=3),
 															 "p =", round(sw$p.value,digits=3)))
-	
-	 
 
 op <- par(fig=c(.02,.5,.4,.98), new=TRUE)
 #A numerical vector of the form c(x1, x2, y1, y2) which gives the (NDC) coordinates of the figure region in the display region of the device. If you set this, unlike S, you start a new plot, so to add to an existing plot use new = TRUE as well.		 
-		 
-		 		 
-		 "Orange line is\n sample average\n weight")
+
 #Create the chart and put it in the original figure inside the box
 hist(x, probability=T,col="light blue", xlab="", ylab="", main="", axes=F)
 lines(density(x), col="red", lwd=2)
 box()
 par(op)
-
-op <- par(fig=c(.5,.98,.02,.6), new=TRUE)
-text(1,9,"Hello World Default")
-box()
-par(op)
+```
 
 
+**(m) A funnel pattern in the plot of residuals versus fits indicates a violation of the independence assumption.**
+<span style="color:green"> TRUE </span>. It indicates the the residuals do not have constant-variance and get larger according to some 
+underlying rule. 
+
+##
+**2.2. Describe the difference between the estimated regression line and the true regression line.**
+
+The true regression line is not usually known. A estimate of the true regression line by calculated the coefficients, based on the observed data. The estimated coefficents are calculated using least squares method. The estimate regression line is then calculated using the coefficents $\beta_0$ and $\beta_1$. This is sometimes called the fitted lined. The difference between the true value and the estimated value is the residual, $e_i = y_i - \hat{y_i}$
+``
 
 
+##
+**2.3.Calculate the estimated regression equation for the orienteering example using the data in Table 2.3. Use either the formulas or software of your choice.**
+```{r, echo=FALSE}
+data<-read.csv(file="Data\\orienteer.csv",header=T)
+#nice ggplot 
+library(ggplot2)
+c <-ggplot(data, aes(Time, Distance),label=Subject)
+c+geom_point()+geom_text(aes(label=Subject),hjust=0, vjust=0)+geom_smooth(method="lm", size=0.5, se=T)
+```
 
+```{r, echo=FALSE}
+fit <- lm(Distance ~ Time,data=data)
+summary(fit) # show results
+anova(fit)
+opar <- par(mfrow = c(2,2), oma = c(0, 0, 1.1, 0))
+plot(fit, las = 1)
+par(opar)
 
-y <- rt(200, df = 5)
-qqnorm(y)
-qqline(y, col = "red")
-qqplot(y, rt(300, df = 5))
+#From these plots, we can identify observations 7, 10, 8 as possibly problematic to our model. We can look at these observations to see which states they represent.
 
-qqplot(qchisq(ppoints(500), df = 3), y,
-       main = expression("Q-Q plot for" ~~ {chi^2}[nu == 3]))
-qqline(y, distribution = function(p) qchisq(p, df = 3),
-       prob = c(0.1, 0.6), col = 2)
-mtext("qqline(*, dist = qchisq(., df=3), prob = c(0.1, 0.6))")
+data[c(7,8,11), 1:2]
 
+y=data$Distance
+yhat=predict(fit,data=data)
+yhat=fit$fitted.values
+resids<-fit$residuals
+rstand <- rstandard(fit)
+leverage=hatvalues(fit)
+d1 <- cooks.distance(fit)
+d1.f.test<-pf(d1,df1=1,df2=nrow(data)-1)
+datapredict <- cbind(data$Time,y,yhat,resids,rstand,leverage,d1,d1.f.test)
+datapredict
+datapredict[order(-abs(d1.f.test)),]
+```
 
-
-
-hist(x, prob=TRUE)
-curve( dchisq(x, df=5), col='green', add=TRUE)
-curve( dchisq(x, df=8), col='blue', add=TRUE)
-curve( dchisq(x, df=10), col='red', add=TRUE )
-
+```{r, echo=FALSE}
+#Aside on general probability functions in R, based on normal distribution
+dnorm(0.5,0,1,log=F) #Two tailed density  NEED TO DOUBLE CHECK THIS WHAT IT IS
+pnorm(0.5)  #area to the left of the curve
+qnorm(0.691425) #area to value
+rnorm(3) #generate random numbers or random deviates. 
+#Convention followed for all distributions.
 ```
 
 
 
-**(m) A funnel pattern in the plot of residuals versus fits indicates a violation of the independence assumption.**
-
-##
-2.2. Describe the difference between the estimated regression line and the true regression
-line.
-
-##
-2.3.Calculate the estimated regression equation for the orienteering example using the
-data in Table 2.3. Use either the formulas or software of your choice.
 
 ##
 2.4. 
-Where would a data point be situated which has the smallest possible leverage?
+**Where would a data point be situated which has the smallest possible leverage?**
 
 ##
 2.5. Calculate the values for leverage, standardized residual, and Cook’s distance for the
