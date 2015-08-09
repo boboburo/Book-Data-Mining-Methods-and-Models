@@ -8,10 +8,10 @@ output:
     number_sections: true
 ---
 
-# holder for numbers
+
 # Clarifying the Concepts
 
-## True/False
+
 Determine whether the following statements are true or false. If a statement is false,explain why and suggest how one might alter the statement to make it true.
 
 **(a) The least-squares line is that line which minimizes the sum of the residuals.**
@@ -147,14 +147,11 @@ par(op)
 <span style="color:green"> TRUE </span>. It indicates the the residuals do not have constant-variance and get larger according to some 
 underlying rule. 
 
-##
 **2.2. Describe the difference between the estimated regression line and the true regression line.**
 
 The true regression line is not usually known. A estimate of the true regression line by calculated the coefficients, based on the observed data. The estimated coefficents are calculated using least squares method. The estimate regression line is then calculated using the coefficents $\beta_0$ and $\beta_1$. This is sometimes called the fitted lined. The difference between the true value and the estimated value is the residual, $e_i = y_i - \hat{y_i}$
 ``
 
-
-##
 **2.3.Calculate the estimated regression equation for the orienteering example using the data in Table 2.3. Use either the formulas or software of your choice.**
 ```{r, echo=FALSE}
 data<-read.csv(file="Data/orienteer.csv",header=T)
@@ -176,13 +173,13 @@ From these plots, we can identify observations 7, 10, 8 as possibly problematic 
 
 ```{r kable1,echo=FALSE}
 library(knitr)
-kable(summary(fit)$coef, digits=4,format = "markdown")
+kable(summary(fit)$coef, digits=3,format = "markdown")
 ```
 
 ```{r pander1,echo=FALSE}
 library(pander)
 panderOptions("digits", 3)
-pander(anova(fit),caption="ANOVA Table of lm fit")
+pander(anova(fit),caption="ANOVA Table of lm fit - Analysis of Variance")
 ```
 
 
@@ -193,7 +190,13 @@ yhat=predict(fit,data=data)
 yhat=fit$fitted.values
 resids<-fit$residuals
 rstand <- rstandard(fit)
-leverage=hatvalues(fit)
+
+#leverage
+leverage<-hatvalues(fit)
+fitInfluence<-influence(fit)
+#leverage==fitInfluence$hat
+#sum(leverage) #adds up to the number of parameters in the model. 
+
 d1 <- cooks.distance(fit)
 d1.f.test<-pf(d1,df1=1,df2=nrow(data)-1)
 datapredict <- cbind(time,y,yhat,resids,rstand,leverage,d1,d1.f.test)
@@ -210,81 +213,94 @@ rnorm(3) #generate random numbers or random deviates.
 #Convention followed for all distributions.
 ```
 
-##
 2.4. 
 **Where would a data point be situated which has the smallest possible leverage?**
 A point with the smallest leverage would be the value nearest the mean of value of the predictor in question. In this case time has $\bar{x}$ = 6. There is one point, 7 that is exactly this there its leverage is simply 1/n = 0.0909... 
 
-##
 **2.5. Calculate the values for leverage, standardized residual, and Cook’s distance for the hard-core hiker example in the text.** 
 Hard-core hiker in this example Time is 16 and distance is 39. 
 
-
-##
 **2.6. Calculate the values for leverage, standardized residual, and Cook’s distance for the eleventh hiker who had hiked for 10 hours and traveled 23 kilometers. Show that although it is neither an outlier nor of high leverage, it is nevertheless influential**
 
-##
 **2.7. Match each of the following regression terms with its definition.**
-Inflential observation - 
+```{r,echo=FALSE}
+
+#Matching phrase to meaning. 
+terms<-c("Influential observation",
+         "SSE","r-sq.",
+         "Residual",
+         "s",
+         "High leverage point","r","SST","Outlier","SSR","Cooks distance")
+
+defs<-c("An observation that alters the regression parameters significantly based on its prsence or absence in the data set.",
+        "Represents an overall measure of the error in prediction resulting from the use of the estimated regression equation.",
+        "The proportion of the variability in the response that is explained by the linear relationship betwen the predictor and response variables.",
+        "The vertical distance between the repsonse predicted an the actual response.",
+        "Measures the **typical** difference between the predicted and actual response values. - standarzied.",
+        "An observation that is extreme in the predictor space (x-variables), without reference to the response variable.",
+        "Measures the strength of the linear relationship between two quantitative variables, with values ranging form -1 to 1",
+        "Represents the total variability in the values of the response variable  alone, without referecne to the predictor.",
+        "An observation that has a very large standardized residual in absolute value.",
+        "Measures the overall improvement in predictor accuracy when usingthe regression as opposed to ignoring the predictor information",
+        "Measures the level of influence of an observation by taking into account both the size of the residual and the amount of leverage for that observation.") 
+```
+
+```{r,echo=FALSE}
+df<-data.frame(Term=terms,Definition=defs)
+df$Term<-as.character(df$Term) #go in as factors. 
+
+library(pander)
+panderOptions('table.alignment.default','left')
+pander(df,caption="Matching", split.cells = c(10,60), split.tables =150)
+```
+
+**2.8. Explain in your own words the implications of the regression assumptions for the behavior of the response variable y. **
+
+The residuals should form a normal distrbution, with a mean. Deviation from this means that the assumptions have been invalidated somehow. The predictions should be contant, no large jumps. The predicted value is the mean of a normal distibution around a normal distirbution with constat variance $\sigma^{2}$ regardless of what value of th predictor. 
 
 
+**2.9. Explain what statistics from Table 2.11 indicate to us that there may indeed be a linear relationship between x and y in this example, even though the value for $r^{2}$ is less than 1%.**
+
+The coefficent of determination $r^2$ is less than 1%. This can be also calculated by $\frac{SSR}{SST}$. The value of $r^2$ can be between 0 and 1. It is way of describing the relation between two variables and can also be found by squaring the correlation coeffience (r Pearson's etc.). 
+
+For simple linear regression the t-test and the F-test are equivalent. 
+
+A hypothesis test are too blunt to determine if a predictor is signifcant. There a *t-interval* confidence interval may be calculated. For 95% confidence interval; $b_1=0.5594$. Not given the number of points, but if we were we could calculate $$\beta_1 \pm (t_{n-2)({S_{b1}}})$$.
+
+For 75 observations this is, $0.05594 \pm (2.0)(.03056) = (-0.55526,0.66714)$. As $\beta_1$ crosses zero we can't be sure the predictor is of benefit. 
 
 
-TABLE HERE
+**2.10. Which values of the slope parameter indicate that no linear relationship exists between the predictor and response variables? Explain how this works.**
 
-##
-2.8. Explain in your own words the implications of the regression assumptions for the
-behavior of the response variable y.
+If the slope parameters is 0 or very close to 0 it means that there is no linear relationship between the predictor and response variables. 
 
-##
-2.9. Explain what statistics from Table 2.11 indicate to us that there may indeed be a linear
-relationship between x and y in this example, even though the value for r 2 is less than
-1%.
 
-##
-2.10. Which values of the slope parameter indicate that no linear relationship exists between
-the predictor and response variables? Explain how this works.
+**2.11. Explain what information is conveyed by the value of the standard error of the slope estimate.**
 
-##
-2.11. Explain what information is conveyed by the value of the standard error of the slope
-estimate.
+s or the *standard error of the estimate*. It is calculated by the $\sqrt{MSE}$ which is $$\frac{SSE}{n-m-1}$$. The SSE is above, it is the sum of **squared** errors.  Like a standard deviation, it is the stand residual or error, it therefore can be used to cosider the precision of the prediction. Smaller values are better.
 
-##
-2.12. Describe the criterion for rejecting the null hypothesis when using the p-value method
-for hypothesis testing. Who chooses the value of the level of significance, α? Make
-up a situation (one p-value and two different values of α) where the very same data
-could lead to two different conclusions of the hypothesis test. Comment.
 
-##
-2.13. 
-(a) Explain why an analyst may prefer a confidence interval to a hypothesis test.
-(b) Describe how a confidence interval may be used to assess significance.
+**2.12. Describe the criterion for rejecting the null hypothesis when using the p-value method for hypothesis testing. Who chooses the value of the level of significance, α? Make up a situation (one p-value and two different values of α) where the very same data could lead to two different conclusions of the hypothesis test. Comment.**
 
-##
-2.14. Explain the difference between a confidence interval and a prediction interval. Which
-interval is always wider? Why? Which interval is probably, depending on the situation,
-more useful to a data miner? Why?
 
-##
-2.15. Clearly explain the correspondence between an original scatter plot of the data and a
-plot of the residuals versus fitted values.
+**2.13. (a) Explain why an analyst may prefer a confidence interval to a hypothesis test. (b) Describe how a confidence interval may be used to assess significance. **
 
-##
-2.16. What recourse do we have if the residual analysis indicates that the regression assumptions
-have been violated? Describe three different rules, heuristics, or family of
-functions that will help us.
+**2.14. Explain the difference between a confidence interval and a prediction interval. Which interval is always wider? Why? Which interval is probably, depending on the situation, more useful to a data miner? Why? **
 
-##
-2.17. A colleague would like to use linear regression to predict whether or not customers
-will make a purchase based on some predictor variable. What would you explain to
-your colleague?
+
+**2.15. Clearly explain the correspondence between an original scatter plot of the data and a plot of the residuals versus fitted values.**
+
+
+**2.16. What recourse do we have if the residual analysis indicates that the regression assumptions have been violated? Describe three different rules, heuristics, or family of functions that will help us.**
+
+
+**2.17. A colleague would like to use linear regression to predict whether or not customers will make a purchase based on some predictor variable. What would you explain to your colleague? **
 
 
 # WORKING WITH DATA
 
-##
-2.18. Based on the scatter plot of attendance at football games versus winning percentage
-of the home team shown in Figure E2.18, answer the following questions.
+
+** 2.18. Based on the scatter plot of attendance at football games versus winning percentage of the home team shown in Figure E2.18, answer the following questions. **
 
 (a) Describe any correlation between the variables, and estimate the value of the
 correlation coefficient r .
@@ -300,21 +316,19 @@ between the variables be small or large? Explain.
 
 (f) Is there an observation that may look as though it is an outlier?
 
-##
-2.19. Use the regression output (shown in Table E2.19) to verify your responses from
-Exercise 2.18.
 
-##
-2.20. Based on the scatter plot shown in Figure E2.20, answer the following questions.
+**2.19. Use the regression output (shown in Table E2.19) to verify your responses from Exercise 2.18.**
+
+
+**2.20. Based on the scatter plot shown in Figure E2.20, answer the following questions.**
 
 (a) Is it appropriate to perform linear regression? Why or why not?
 
 (b) What type of transformation or transformations are called for? Use the bulging
 rule.
 
-##
-2.21. Based on the regression output shown in Table E2.21 (from the churn data set), answer
-the following questions.
+
+**2.21. Based on the regression output shown in Table E2.21 (from the churn data set), answer the following questions.**
 
 (a) Is there evidence of a linear relationship between z vmail messages (z-scores of
 the number of voice mail messages) and z day calls (z-scores of the number of
@@ -326,11 +340,10 @@ if we simply used the sample mean response and no information about day calls?
 Now, from the printout, what is the typical error in predicting z vmail messages
 given z day calls? Comment.
 
-# Hand on Analysis
+# Hands on Analysis
 
-##
-2.22. Open the baseball data set, which is available at the book series Web site. Subset the
-data so that we are working with batters who have at least 100 at bats.
+
+**2.22. Open the baseball data set, which is available at the book series Web site. Subset the data so that we are working with batters who have at least 100 at bats.**
 
 (a) We are interested in investigating whether there is a linear relationship between
 the number of times a player has been caught stealing and the number of stolen
@@ -361,8 +374,7 @@ tells you this?
 explains most of the variability in the number of times the player gets caught
 stealing. What would you say?
 
-##
-2.23. Open the cereals data set, which is available at the book series Web site.
+**2.23. Open the cereals data set, which is available at the book series Web site.**
 
 (a) We are interested in predicting nutrition rating based on sodium content. Construct
 the appropriate scatter plot.
@@ -391,8 +403,8 @@ all cereals with a sodium content of 100.
 (k) Construct and interpret a 95% confidence interval for the nutrition rating for a
 randomly chosen cereal with sodium content of 100.
 
-##
-2.24. Open the California data set, which is available at the book series Web site.
+
+**2.24. Open the California data set, which is available at the book series Web site.**
 
 (a) Recapitulate the analysis performed within the chapter.
 
@@ -402,21 +414,3 @@ best regression model.
 
 
 
-
-
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
-```
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,113 @@
+---
+title: "Chapter 3 Multiple Regression Modelling Questions"
+author: "Brian"
+date: "9 August 2015"
+output: html_document
+---
+
+# holder for numbers
+# Clarifying the Concepts
+
+
+**3.1. Determine whether the following statements are true or false. If a statement is false, explain why and suggest how one might alter the statement to make it true.**
+(a) If we would like to approximate the relationship between a response and two continuous predictors, we would need a plane.
+(b) Inlinearregression,althoughtheresponsevariableistypicallycontinuous,itmay be categorical as well.
+(c) Ingeneral,foramultipleregressionwithmpredictorvariables,wewouldinterpret, coefficientbi asfollows:Theestimatedchangeintheresponsevariableforaunit increaseinvariablexi isbi.
+(d) Inmultipleregression,theresidualisrepresentedbytheverticaldistancebetween the data point and the regression plane or hyperplane.
+(e) Whenever a new predictor variable is added to the model, the value of R2 always goes up.
+
+(f) The alternative hypothesis in the F-test for the overall regression asserts that the
+regression coefficients all differ from zero.
+(g) The standard error of the estimate is a valid measure of the usefulness of the regression, without reference to an inferential model (i.e., the assumptions need not be relevant).
+(h) If we were to use only the categorical variables as predictors, we would have to use analysis of variance and could not use linear regression.
+(i) Foruseinregression,acategoricalvariablewithkcategoriesmustbetransformed into a set of k indicator variables.
+(j) The first sequential sum of squares is exactly the value for SSR from the simple linear regression of the response on the first predictor.
+(k) Thevarianceinflationfactorhasaminimumofzero,butnoupperlimit.
+(l) A variable that has been entered into the model early in the forward selection process will remain significant once other variables have been entered into the model.
+(m) Thevariableselectioncriteriaforchoosingthebestmodelaccountforthemulti- collinearity among the predictors.
+(n) The variance inflation factors for principal components using varimax rotation always equal 1.0.
+
+**3.2. Clearly explain why s and R2 are preferable to R2 as measures for model building. adj**
+
+**3.3. Explain the difference between the t-test and the F-test for assessing the significance of the predictors.**
+
+**3.4. Constructindicatorvariablesforthecategoricalvariableclass,whichtakesfourvalues: freshman, sophomore, junior, and senior.**
+
+**3.5. Whenusingindicatorvariables,explainthemeaningandinterpretationoftheindicator variable coefficients, graphically and numerically.**
+
+**3.6. Discusstheconceptofthelevelofsignificance(α).Atwhatvalueshoulditbeset?Who should decide the value of α? What if the observed p-value is close to α? Describe a situation where a particular p-value will lead to two different conclusions given two different values for α.**
+
+**3.7. Explain what it means when R2 is much less than R2. adj**
+
+**3.8. Explain the difference between the sequential sums of squares and the partial sums of squares. For which procedures do we need these statistics?**
+**3.9. Explain some of the drawbacks of a set of predictors with high multicollinearity.**
+
+**3.10. Whichstatisticsreportthepresenceofmulticollinearityinasetofpredictors?Explain, using the formula, how this statistic works. Also explain the effect that large and small values of this statistic will have on the standard error of the coefficient.**
+
+**3.11. Compare and contrast the effects that multicollinearity has on the point and intervals estimates of the response versus the values of the predictor coefficients.**
+
+**3.12. Describe the differences and similarities among the forward selection procedure, the backward elimination procedure, and the stepwise procedure.**
+
+**3.13. Describe how the best subsets procedure works. Why not always use the best subsets procedure?**
+
+**3.14. Describe the behavior of Mallows’ Cp statistic, including the heuristic for choosing the best model.**
+
+**3.15. Suppose that we wished to limit the number of predictors in the regression model to a lesser number than those obtained using the default settings in the variable selection criteria. How should we alter each of the selection criteria? Now suppose that we wished to increase the number of predictors? How then should we alter each of the selection criteria?**
+
+**3.16. Explain the circumstances under which the value for R2 would reach 100%. Now explain how the p-value for any test statistic could reach zero.**
+
+#Working with the Data
+
+**3.17. Consider the multiple regression output for model 1 from SPSS in Table E 3.17 using the nutrition data set on the book series Web site. Answer the following questions.**
+(a) Whatistheresponse?Whatarethepredictors?
+(b) What is the conclusion regarding the significance of the overall regression? How do you know? Does this mean that all the predictors are important? Explain.
+(c) Whatisthetypicalerrorinprediction?(Hint:Thismaytakeabitofdigging.)
+(d) Howmanyfoodsareincludedinthesample?
+(e) How are we to interpret the value of b0, the coefficient for the constant term? Is this coefficient significantly different from zero? Explain how this makes sense.
+(f) Whichofthepredictorsprobablydoesnotbelonginthemodel?Explainhowyou know this. What might be your next step after viewing these results?
+(g) Supposethatweomitcholesterolfromthemodelandreruntheregression.Explain
+what will happen to the value of R2.
+(h) Which predictor is negatively associated with the response? Explain how you
+know this.
+(i) Discuss the presence of multicollinearity. Evaluate the strength of evidence for the presence of multicollinearity. Based on this, should we turn to principal com- ponents analysis?
+(j) Clearlyandcompletelyexpresstheinterpretationforthecoefficientforsodium.
+(k) Supposethatacertainfoodwaspredictedtohave60caloriesfewerthanitactually has, based on its content of the predictor variables. Would this be considered unusual? Explain specifically how you would determine this.
+
+**3.18. To follow up, next consider the multiple regression output for model 1 from SPSS in Table E3.18. Three predictor variables have been added: saturated fat, monounsatu- rated fat, and polyunsaturated fat. Discuss the presence of multicollinearity. Evaluate the strength of evidence for the presence of multicollinearity. Based on this, should we turn to principal components analysis?**
+
+**3.19. Consider the multiple regression output for model 1 from SPSS in Table E3.19, using the New York data set on the book series Web site. The data set contains demographic information about a set of towns in New York State. The response male-fem is the number of males in the town for every 100 females. The predictors are the percentage under the age of 18, the percentage between 18 and 64, and the percentage over 64 living in the town (all expressed in percents, such as 57.0), along with the town’s total population. Answer the following questions.**
+
+(a) Note that the variable pct-064 was excluded. Explain why this variable was ex- cluded automatically from the analysis by the software. (Hint: Consider the anal- ogous case of using too many indicator variables to define a particular categorical variable.)
+(b) Whatistheconclusionregardingthesignificanceoftheoverallregression?
+(c) Whatisthetypicalerrorinprediction?
+(d) Howmanytownsareincludedinthesample?
+(e) Whichofthepredictorsprobablydoesnotbelonginthemodel?Explainhowyou
+know this. What might be your next step after viewing these results?
+(f) Suppose that we omit tot- pop from the model and rerun the regression. Explain
+what will happen to the value of R2.
+(g) Discuss the presence of multicollinearity. Evaluate the strength of evidence for the presence of multicollinearity. Based on this, should we turn to principal com- ponents analysis?
+(h) Clearlyandcompletelyexpresstheinterpretationforthecoefficientforpct-U18. Discuss whether this makes sense.
+
+#Hands-on Analysis
+
+**3.20. In the chapter it was surmised that the reason the shelf 2 indicator variable was no longer important was that perhaps it was somehow associated with the cereals that had been omitted because they were outliers. Investigate whether this was indeed the case.**
+
+**3.21. Open the nutrition data set on the book series Web site.**
+(a) Build the best multiple regression model you can for the purposes of predicting calories, using all the other variables as the predictors. Don’t worry about whether or not the predictor coefficients are stable.
+(i) Compare and contrast the results from the forward selection, backward elim- ination, and stepwise variable selection procedures.
+(ii) Applythebestsubsetsprocedure,andcompareagainstthepreviousmethods.
+(iii) (Extracredit)Writeascriptthatwillperformallpossibleregressions.Didthe variable selection algorithms find the best regression?154 CHAPTER 3 MULTIPLE REGRESSION AND MODEL BUILDING
+(b) Buildthebestmultipleregressionmodelyoucanforthepurposesbothofpredict- ing the response and of profiling the predictors’ individual relationship with the response. Make sure that you account for multicollinearity.
+
+**3.22. Open the New York data set at the book series Web site. Build the best multiple regression model you can for the purposes of predicting the response, using the gender ratio as the response and all the other variables as the predictors.**
+(a) Compare and contrast the results from the forward selection, backward elimina- tion, and stepwise variable selection procedures.
+(b) Applythebestsubsetsprocedure,andcompareagainstthepreviousmethods.
+(c) Perform all possible regressions. Did the variable selection algorithms find the
+best regression?
+
+**3.23. Open the crash data set at the book series Web site. Build the best multiple regression model you can for the purposes of predicting head injury severity, using all the other variables as the predictors.**
+(a) Determinewhichvariablesmustbemadeintoindicatorvariables.
+(b) Determinewhichvariablesmightbesuperfluous.
+(c) Buildtwoparallelmodels,onewhereweaccountformulticollinearityandanother where we do not. For which purposes may each of these models be used?
+
+**3.24. Continuing with the crash data set, combine the four injury measurement variables into a single variable, defending your choice of combination function. Build the best multiple regression model you can for the purposes of predicting injury severity, using all the other variables as the predictors. Build two parallel models, one where we account for multicollinearity and another where we do not. For which purposes may each of these models be used?**
