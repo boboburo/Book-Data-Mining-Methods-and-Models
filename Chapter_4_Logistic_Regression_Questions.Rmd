@@ -1,0 +1,116 @@
+---
+title: "Chapther 4 Logistic Regression Exercises"
+author: "Brian"
+date: "9 August 2015"
+output: html_document
+---
+
+#Clarifying the Concepts
+
+**4.1. Determine whether the following statements are true or false. If a statement is false, explain why and suggest how one might alter the statement to make it true.**
+(a) Logistic regression refers to methods for describing the relationship between a categorical response variable and a set of categorical predictor variables.
+(b) Logistic regression assumes that the relationship between the predictor and the response is nonlinear.
+(c) π(x)may be interpreted as a probability.
+
+(d) Logistic regression models assume that the error term ε is normally distributed
+with mean zero and constant variance.
+(e) Inlogisticregression,closed-formsolutionsfortheoptimalvaluesoftheregres- sion coefficients may be obtained.
+(f) Thesaturatedmodelpredictstheresponsevariableperfectly.
+(g) Thedeviancerepresentsthetotalvariabilityintheresponse.
+(h) Encodingatrichotomouspredictorrequiresonlytwoindicatorvariables.
+(i) Thet-testprovidesamethodforfindingtheresponseprobabilities.
+(j) Theinterpretationofthelogisticregressioncoefficientforacontinuouspredictor may be extended from the usual unit increase to an increase of any arbitrary amount.
+(k) Theestimatedoddsratioisconstantacrosstherangeofthepredictor.
+
+**4.2. By hand, derive the logit result g(x) = β0 + β1x.**
+
+**4.3. Explain what is meant by maximum likelihood estimation and describe maximum likelihood estimators.**
+
+**4.4. Explain clearly how the slope coefficient β1 and its estimate b1 may be interpreted in logistic regression. Provide at least two examples, using both a categorical and a continuous predictor.**
+
+**4.5. What are odds? What is the difference between odds and probability?**
+
+**4.6. What is the definition of the odds ratio? What is the relationship between the odds ratio and the slope coefficient β1? For what quantity is the odds ratio sometimes used as an estimate?**
+
+**4.7. Describe how we determine the statistical significance of the odds ratio using a confi- dence interval.**
+
+**4.8. If the difference between a particular indicator variable and the reference category is not significant, what should the analyst consider doing?**
+
+**4.9. Discusstheroleofstatisticalinferencewithrespecttothehugesamplesizesprevalent in data mining.**
+
+**4.10. Discusstheassumptionthattheoddsratioisconstantacrosstherangeofthepredictor, with respect to various types of relationships between the predictor and the response. Provide modeling options for when this assumption may not be reflected in the data.**
+
+**4.11. Discuss the use of predictors that turn out to be nonsignificant in estimating response. When might this be appropriate, if at all? Why would this not be appropriate in general?**
+
+**4.12. For data that are missing one or more indicator variable values, explain why it would not be appropriate simply to ignore these missing variables when making an estimation. Provide options for the data analyst in this case.**
+
+#Working with the Data
+
+**4.13. The logistic regression output shown in Table E4.13 refers to the breast cancer data set [8]. Ten numeric predictors are used to predict the class malignant breast cancer tumor (class = 1) as opposed to benign tumor (class = 0).**
+(a) What is the value of the deviance difference? Is the overall logistic regression significant? How can you tell? What does it mean to say that the overall logistic regression is significant?
+
+
+
+(b) Withoutreferencetoinferentialsignificance,expresstheformofthelogit.
+(c) Whichvariablesdonotappeartobesignificantpredictorsofbreasttumorclass? How can you tell?
+(d) Discuss whether the variables you cited in Part (c) should be used in predicting the class of tumor with an new, unseen data set.
+(e) Discusshowyoushouldhandlevariableswithp-valuesaround0.05,0.10,or0.15.
+(f) Explainwhatwillhappentothedeviancedifferenceifwererunthemodeldropping
+the nonsignificant variables. Work by analogy with the linear regression case.
+
+**4.14. Next, the logistic regression for the breast cancer data set was run again, this time dropping the cell size uniformity and single epithelial cell size variables but retaining all the others. The logistic regression output shown in Table E4.14 contains the results.**
+
+(a) Explainwhythedeviancedifferencefell,butonlybyasmallamount.
+(b) Did you drop cell shape uniformity in Exercise 4.13? Are you surprised that the variable is now a significant predictor? Discuss the importance of retaining variables of borderline significance in the early stages of model building.
+(c) Assumethatourlevelofsignificanceis0.11.Expressthelogitusingallsignificant variables.
+(d) Findtheprobabilitythatatumorismalignantgiventhefollowing: (i) The values for all predictors are at the minimum (1).
+(ii) The values for all predictors are at a moderate level (5). (iii) The values for all predictors are at the maximum (10).
+(e) Calculatethe95%confidenceintervalsforthefollowingpredictorcoefficients:
+(i) Clump thickness
+(ii) Mitoses
+Comment as to the evidence provided by the confidence interval regarding the significance of the mitoses coefficient.
+
+f) Clearlyinterpretthevalueofthecoefficientsforthefollowingpredictors: (i) Bland chromatin
+(ii) Normal nucleoli
+
+#Hands-on Analysis
+
+**4.15. Open the adult data set, which is provided at the book series Web site. Construct the logistic regression model developed in the text with the age2 term and the indicator variable age 33–65.**
+(a) Verifythatusingthequadratictermprovidesahigherestimateoftheprobability of high income for a 32-year-old than a 20-year-old.
+(b) AnalyzeandinterprettheresultsfromTable4.25.
+(i) Find the form of the logit estimated.
+(ii) Find the probability of high income for someone working 30, 40, 50, and 60 hours per week.
+(iii) Construct and interpret a 95% confidence interval for each coefficient.
+(c) ConsidertheresultsfromTable4.26.Constructthelogisticregressionmodelthat
+produced these results.
+(i) For indicator categories that are not significant, collapse the categories with the reference category. (How are you handling the category with the 0.083 p-value?)
+(ii) Rerun the logistic regression with these collapsed categories.
+(d) Basedonyourresultsfromrerunningthelogisticregression:
+(i) Find the estimated logit.
+(ii) Constructandinterpret95%confidenceintervalsforthecoefficientsforage, sex-male, and educ-squared. Verify that these predictors belong in the model.
+
+(iii) Find the probability of high income for (1) a 20-year-old single female with 12 years of education working 20 hours per week with no capital gains or losses, and (2) a 50-year-old married male with 16 years of education working 40 hours per week with capital gains of $6000.
+**4.16. OpentheGermandataset[9],whichisprovidedonthebookseriesWebsite.Thedata set consists of 20 predictors, both continuous and categorical, and a single response variable, indicating whether the individual record represents a good or a bad credit risk. The predictors are as follows, with amounts in deutsche marks (DM):**
+ Status of existing checking account  Duration in months
+ Credit history
+ Loan purpose
+ Credit amount
+ Savings account/bonds
+ Presently employed since
+ Payment as percentage of disposable income
+ Personal status and gender
+ Other debtors/guarantors
+ Present residence since
+ Property
+ Age
+ Other installment plans
+ Housing
+ Number of existing credits at this bank
+ Job
+ Number of people being liable to provide maintenance for  Telephone
+ Foreign worker
+More information is available about this data set from the book series Web site. Con- struct the best logistic regression model you can, using as many of the methods we learned in this chapter as possible. Provide strong interpretive support for your model, including explanations of derived variables, indicator variables, and so on.
+
+**4.17. Openthebreastcancerdataset[8].Foreachsignificantpredictor,investigate,whether the linearity assumption is warranted. If not, ameliorate the situation using the methods discussed in this chapter.**
+
+**4.18. Recall the WEKA Logistic example for classifying cereals as either high or low. Compute the probability that the fourth instance from the test set is classified either high or low. Does your probability match that produced by WEKA?**
