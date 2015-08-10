@@ -462,6 +462,25 @@ p1+ theme(axis.text.x=element_text(size=16,face="bold"), axis.title.x=element_te
 
 ```
 
+```{r}
+
+cereals<-read.csv("Data/cereals.csv",header=T)
+library(ggplot2)
+p1<-ggplot(cereals,aes(x=sodium,y=rating))
+p1<-p1+geom_jitter(position=position_jitter(width=2.5,height=2.5),aes(color=as.factor(type)))
+p1<-p1+labs(x="Sodium",y="Rating",title="Little bit of Jitter")
+p1<-p1+theme(legend.position=c(1,0),legend.justification=c(0.9,-0.1)) #not sure how this is working
+p1<-p1+scale_color_manual("Legend Title\n",labels = c("C", "H"),values=c("blue","red"))
+p1+ theme(axis.text.x=element_text(size=16,face="bold"), axis.title.x=element_text(size=22,color="red"),
+        axis.text.y=element_text(size=16,face="bold"), axis.title.y=element_text(size=22,color="blue"),
+        plot.title=element_text(size=20, face="bold", color="darkgreen"))
+
+
+
+```
+
+
+
 
 (b) Based on the scatter plot, is there strong evidence of a linear relationship between
 the variables? Discuss. Characterize their relationship, if any. There is evidence of some linear relationship, moderate relationship.
@@ -472,11 +491,62 @@ the variables? Discuss. Characterize their relationship, if any. There is eviden
 fit<-lm(rating~sodium, cereals)
 library(pander)
 pander(summary(fit))
+
+#Similar way of construction the linear regression with gineral linear model. 
 fit2<-glm(rating~sodium,data=cereals,family=gaussian(link="identity"))
 
 ```
 
 (d) Which cereal is an outlier? Explain why this cereal is an outlier.
+
+Construct a visual plot to examine the Standardized reisdual an the Fitted Value.
+
+```{r}
+#Create a plot of the residuals against fitted values. 
+r<-fit$residuals
+yh<-predict(fit)
+
+#Any standardized residual that is greater than 1.9 consider as an outlier and output its row.name
+#Remember the standardized residual is the total square error of the regression divided by df. 
+#Residual standard error:
+rse<-sqrt(deviance(fit)/df.residual(fit))
+#Alternatively
+rs<-rstandard(fit)
+names<-row.names(cereals)
+
+#Create the plot 
+d<-data.frame(r,yh)
+
+p1<-ggplot(d,aes(x=yh,y=r),label=names)+
+	geom_point(size=2)+
+	labs(x="Fitted Values",y="Residuals",title="Fitted values vs. Residuals")+
+	geom_text(aes(label=ifelse(abs(rs)>1.5,as.character(names),'')),hjust=0.5,vjust=-1,color="red")+
+	geom_hline(yintercept=rse,color="blue",linetype="dashed")+
+	geom_hline(yintercept=0)+
+	geom_hline(yintercept=-rse,color="blue",linetype="dashed")+
+  annotate("text", label = paste("Residual Std. Error",round(rse,2)),size=3, x = 32, y = rse+1.5,hjust=-0.05)+
+	annotate("text", label = paste("Residual Std. Error",round(rse,2)),size=3, x = 32, y = -(rse+1.5),hjust=-0.05)+
+	geom_smooth(method="loess",color="red")+   #default method is loess
+	annotate("text",label = "The plot of the Fitted Values against the residuals.\nOutliers indicated as being greater than 1.5 * Residual St. Error.\nNormally this is set to 2 times the RSE.\nThe red line is the smoothed curve that passes through the residuals. \nThe flatter the better and closer to zero is better.",size=3,x=32,y=43,hjust=0)+
+	geom_vline(xintercept=fit$coefficients[1],color="green")+
+	annotate("text", x=53, y=35,size=3, label="Y-intercept = 53.40",angle = 90)
+p1
+
+#Alternatively could have done
+#par(ask=TRUE)
+plot(fit,which=c(1))
+#par(ask=FALSE)
+
+p2<-ggplot(cereals,aes(x=sodium))+geom_histogram()
+
+
+library(gridExtra)
+grid.arrange(p2,p1,ncol=1,nrow=2,heights=c(1,4))
+
+
+
+```
+
 
 (e) What is the typical error in predicting rating based on sodium content?
 
