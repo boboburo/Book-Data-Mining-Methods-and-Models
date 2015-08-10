@@ -174,7 +174,7 @@ par(opar)
 
 #From these plots, we can identify observations 7, 10, 8 as possibly problematic to our model. We can look at these observations to see which states they represent.
 
-data[c(7,8,11), 1:2]
+#data[c(7,8,11), 1:2]
 
 y=data$Distance
 yhat=predict(fit,data=data)
@@ -185,9 +185,19 @@ leverage=hatvalues(fit)
 d1 <- cooks.distance(fit)
 d1.f.test<-pf(d1,df1=1,df2=nrow(data)-1)
 datapredict <- cbind(data$Time,y,yhat,resids,rstand,leverage,d1,d1.f.test)
-datapredict
-datapredict[order(-abs(d1.f.test)),]
+#datapredict[order(-abs(d1.f.test)),]
 ```
+
+```{r pander}
+library(pander)
+panderOptions("digits",2)
+pander(summary(fit))
+```
+
+```{r,results='asis'}
+knitr::kable(datapredict[order(-abs(d1.f.test)),])
+```
+
 
 ```{r, echo=FALSE}
 #Aside on general probability functions in R, based on normal distribution
