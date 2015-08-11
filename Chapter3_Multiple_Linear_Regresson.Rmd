@@ -5,7 +5,7 @@ date: "9 August 2015"
 output: html_document
 ---
 
-# holder for numbers
+
 # Clarifying the Concepts
 
 

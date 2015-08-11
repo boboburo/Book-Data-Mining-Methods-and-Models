@@ -408,7 +408,7 @@ pander(fit.anova)
 ```
 
 (d) Find and interpret the statistic which tells you how well the data fit the model.
-The value of *coefficent of determination* $R^2$ is 0.49, which means about half the variance in response is accounted for. Remember $R^2$ equals $\frac{SSR/SST}$ = $\frac{839}{1710}$. 
+The value of *coefficent of determination* $R^2$ is 0.49, which means about half the variance in response is accounted for. Remember $R^2$ equals $\frac{SSR}{SST}$ = $\frac{839}{1710}$. 
 
 
 (e) What is the typical error in predicting the number of times a player is caught
@@ -444,7 +444,7 @@ stealing. What would you say? It only explains about half the variability.
 (a) We are interested in predicting nutrition rating based on sodium content. Construct
 the appropriate scatter plot.
 
-```{r}
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
 
 #Add some more control with theme, scale_color_manual, 
 
@@ -462,8 +462,7 @@ p1+ theme(axis.text.x=element_text(size=16,face="bold"), axis.title.x=element_te
 
 ```
 
-```{r}
-
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
 cereals<-read.csv("Data/cereals.csv",header=T)
 library(ggplot2)
 p1<-ggplot(cereals,aes(x=sodium,y=rating))
@@ -474,9 +473,6 @@ p1<-p1+scale_color_manual("Legend Title\n",labels = c("C", "H"),values=c("blue",
 p1+ theme(axis.text.x=element_text(size=16,face="bold"), axis.title.x=element_text(size=22,color="red"),
         axis.text.y=element_text(size=16,face="bold"), axis.title.y=element_text(size=22,color="blue"),
         plot.title=element_text(size=20, face="bold", color="darkgreen"))
-
-
-
 ```
 
 
@@ -492,16 +488,19 @@ fit<-lm(rating~sodium, cereals)
 library(pander)
 pander(summary(fit))
 
+fit.anova<-anova(fit)
+pander(fit.anova)
+
 #Similar way of construction the linear regression with gineral linear model. 
 fit2<-glm(rating~sodium,data=cereals,family=gaussian(link="identity"))
 
 ```
 
-(d) Which cereal is an outlier? Explain why this cereal is an outlier.
+(d) Which cereal is an outlier? Explain why this cereal is an outlier. 
 
-Construct a visual plot to examine the Standardized reisdual an the Fitted Value.
+Construct a visual plot to examine the Standardized reisdual an the Fitted Value. The point **4** is an outlier as it is more than twice the standard residual. 3 and 1 are returned also in the the *plot.lm* results. 
 
-```{r}
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
 #Create a plot of the residuals against fitted values. 
 r<-fit$residuals
 yh<-predict(fit)
@@ -517,55 +516,77 @@ names<-row.names(cereals)
 #Create the plot 
 d<-data.frame(r,yh)
 
-p1<-ggplot(d,aes(x=yh,y=r),label=names)+
+p4<-ggplot(d,aes(x=yh,y=r),label=names)+
 	geom_point(size=2)+
 	labs(x="Fitted Values",y="Residuals",title="Fitted values vs. Residuals")+
-	geom_text(aes(label=ifelse(abs(rs)>1.5,as.character(names),'')),hjust=0.5,vjust=-1,color="red")+
+	geom_text(aes(label=ifelse(abs(rs)>1.8,as.character(names),'')),hjust=0.5,vjust=-1,color="red")+
 	geom_hline(yintercept=rse,color="blue",linetype="dashed")+
 	geom_hline(yintercept=0)+
 	geom_hline(yintercept=-rse,color="blue",linetype="dashed")+
   annotate("text", label = paste("Residual Std. Error",round(rse,2)),size=3, x = 32, y = rse+1.5,hjust=-0.05)+
 	annotate("text", label = paste("Residual Std. Error",round(rse,2)),size=3, x = 32, y = -(rse+1.5),hjust=-0.05)+
 	geom_smooth(method="loess",color="red")+   #default method is loess
-	annotate("text",label = "The plot of the Fitted Values against the residuals.\nOutliers indicated as being greater than 1.5 * Residual St. Error.\nNormally this is set to 2 times the RSE.\nThe red line is the smoothed curve that passes through the residuals. \nThe flatter the better and closer to zero is better.",size=3,x=32,y=43,hjust=0)+
+	annotate("text",label = "The plot of the Fitted Values against the residuals.\nOutliers indicated as being greater than 1.8 * Residual St. Error.\nNormally this is set to 2 times the RSE.\nThe red line is the smoothed curve that passes through the residuals. \nThe flatter the better and closer to zero is better.",size=3,x=32,y=43,hjust=0)+
 	geom_vline(xintercept=fit$coefficients[1],color="green")+
 	annotate("text", x=53, y=35,size=3, label="Y-intercept = 53.40",angle = 90)
-p1
+p4+ylim(-22,52)
 
 #Alternatively could have done
-#par(ask=TRUE)
 plot(fit,which=c(1))
-#par(ask=FALSE)
-
-p2<-ggplot(cereals,aes(x=sodium))+geom_histogram()
-
-
-library(gridExtra)
-grid.arrange(p2,p1,ncol=1,nrow=2,heights=c(1,4))
-
-
-
 ```
 
+Now look at combining some plots, the predictor and the target with multiple plots. 
 
-(e) What is the typical error in predicting rating based on sodium content?
+```{r,warning=FALSE,message=FALSE}
+#Create a histogram of sodium but reverse the order using negation. 
+pc2<-ggplot(cereals,aes(x=-sodium))+geom_histogram()
+pc1<-p4+ylim(-25,55)
 
-(f) Interpret the y-intercept. Does this make any sense? Why or why not?
+#markdown having problems with unit
+#pc1<-p1+theme(plot.margin=unit(c(1,1,-0.5,1), "cm"))
+#pc2<-p2+theme(plot.margin=unit(c(1,1,-0.5,1), "cm"))
 
-(g) Inferentially, is there a significant relationship between the two variables? What
-tells you this?
+pc2<-pc2+theme(axis.text.y=element_blank(),axis.ticks.y=element_blank())
+library(gridExtra)
+grid.arrange(pc2,pc1,ncol=1,nrow=2,heights=c(1,4))
+```
+
+(e) What is the typical error in predicting rating based on sodium content? The typical error is `r 
+sqrt(deviance(fit)/df.residual(fit))` As shown by the dotted blue lines in the above graph. 
+
+
+
+(f) Interpret the y-intercept. Does this make any sense? Why or why not? The y-intercept is `r fit$coefficients[1]`. This is the expect value when $b_1$ is zero. This could be a possible credible value. The mean when *sodium* is zero is `r mean(cereals$rating[cereals$sodium==0])`. The actual range of values is `r cereals$rating[cereals$sodium==0]`. So it is probably a bit on the low side. But $R^2$ is only .49 so this is expected. 
+
+TO FINISH
+(g) Inferentially, is there a significant relationship between the two variables? What tells you this? The 95% confidence interval of the slope is 
 
 (h) Calculate and interpret the correlation coefficient.
 
-(i) Clearly interpret the meaning of the slope coefficient.
+```{r}
 
-(j) Construct and interpret a 95% confidence interval for the true nutrition rating for
-all cereals with a sodium content of 100.
+cor1<-cor(cereals$rating,cereals$sodium)
+sse<-sum((cereals$rating-fit$fitted.values)^2)  #SSE
+sst<-sum((cereals$rating-mean(cereals$rating))^2)
+ssr<-sst-sse
+cor2<-sqrt(ssr/sst)
+
+```
+
+The correlation co-efficent can be calculated as $$r=\sqrt{R^2}$$ which equals `r sqrt(ssr/sst)` or simply `r cor(cereals$rating,cereals$sodium)`
+
+
+(i) Clearly interpret the meaning of the slope coefficient. The slope coefficient is `r fit$coefficients[2]` 
+
+(j) Construct and interpret a 95% confidence interval for the true nutrition rating for all cereals with a sodium content of 100.
+
+TO FINISH
+
 
 (k) Construct and interpret a 95% confidence interval for the nutrition rating for a
 randomly chosen cereal with sodium content of 100.
 
-
+TO FINISH
 **2.24. Open the California data set, which is available at the book series Web site.**
 
 (a) Recapitulate the analysis performed within the chapter.
